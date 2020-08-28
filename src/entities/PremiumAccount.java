@@ -16,13 +16,18 @@ public class PremiumAccount extends CommonAccount {
 	public void withdraw(Double amount) throws AccountExceptions {
 		if (amount > this.amount) {
 			throw new AccountExceptions("Insufficient account amount");
+		} else if (amount < 1) {
+			throw new AccountExceptions("Incorrect value, the value must be greater than or equal to 1");
 		}
 		this.amount = (this.amount - amount);
 		receipt.add(new Receipt(getName(), getId(), new Date(), amount, AccountAction.WITHDRAWN));
 	}
 
 	@Override
-	public void deposit(Double amount) {
+	public void deposit(Double amount) throws AccountExceptions {
+		if (amount < 1) {
+			throw new AccountExceptions("Incorrect value, the value must be greater than or equal to 1");
+		}
 		this.amount = (this.amount + amount);
 		receipt.add(new Receipt(getName(), getId(), new Date(), amount, AccountAction.DEPOSITED));
 	}
@@ -31,6 +36,8 @@ public class PremiumAccount extends CommonAccount {
 	public void transfer(Double amount, Account account) throws AccountExceptions {
 		if (amount > this.amount) {
 			throw new AccountExceptions("Insufficient account amount");
+		} else if (amount < 1) {
+			throw new AccountExceptions("Incorrect value, the value must be greater than or equal to 1");
 		}
 		this.amount = (this.amount - amount);
 		receipt.add(new Receipt(getName(), getId(), getDate(), amount, AccountAction.SENT));
@@ -48,6 +55,5 @@ public class PremiumAccount extends CommonAccount {
 		return "Account Type: " + type + "\nID: " + getId() + "\nName: " + getName() + "\nEmail: " + getEmail()
 				+ "\nClient since: " + SDF.format(getDate()) + "\nAccount amount: " + amount;
 	}
-
 
 }
